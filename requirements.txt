@@ -2,6 +2,6 @@ fastapi
 uvicorn
 google-generativeai
 openai-whisper
-torch==2.0.1+cpu
+torch==2.5.1
 python-multipart
 gTTS
