@@ -9,7 +9,15 @@ model = genai.GenerativeModel("gemini-pro")
 
 print("Gemini key loaded:", bool(os.getenv("GEMINI_API_KEY")))
 
-evaluation_prompt_path= Path(__file__).parent / "prompts" / "evaluation.txt"
+BASE_DIR = Path(__file__).resolve().parent
+
+evaluation_prompt_path = BASE_DIR / "prompts" / "evaluation.txt"
+
+if not evaluation_prompt_path.exists():
+    raise RuntimeError(
+        f"Missing file: {evaluation_prompt_path}. "
+        "Ensure prompts/evaluation.txt exists and is committed."
+    )
 evaluation_prompt = evaluation_prompt_path.read_text()
 
 
