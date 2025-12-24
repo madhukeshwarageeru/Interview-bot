@@ -9,7 +9,19 @@ from evaluator import evaluate
 from decision import decide
 from tts import text_to_speech
 
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import HTMLResponse
+
+
 app = FastAPI()
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+@app.get("/", response_class=HTMLResponse)
+def home():
+    with open("static/index.html") as f:
+        return f.read()
+
 
 current_question = get_question()
 
