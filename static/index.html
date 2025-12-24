@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Interviewer</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<h2>🎤 AI Interviewer</h2>
+
+<button onclick="getQuestion()">Get Question</button>
+<p id="question"></p>
+
+<audio id="questionAudio" controls></audio>
+
+<hr>
+
+<button onclick="startRecording()">Start Answer</button>
+<button onclick="stopRecording()">Stop</button>
+
+<hr>
+
+<button onclick="submitAnswer()">Submit Answer</button>
+
+<h3>Result</h3>
+<pre id="result"></pre>
+<audio id="feedbackAudio" controls></audio>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
