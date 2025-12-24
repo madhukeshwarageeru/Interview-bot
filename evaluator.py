@@ -9,8 +9,11 @@ model = genai.GenerativeModel("gemini-pro")
 
 print("Gemini key loaded:", bool(os.getenv("GEMINI_API_KEY")))
 
-BASE_DIR = Path(__file__).resolve().parent
 
+BASE_DIR = Path(__file__).resolve().parent
+print("BASE_DIR:", BASE_DIR)
+print("Files in BASE_DIR:", list(BASE_DIR.iterdir()))
+print("Prompts exists:", (BASE_DIR / "prompts").exists())
 evaluation_prompt_path = BASE_DIR / "prompts" / "evaluation.txt"
 
 if not evaluation_prompt_path.exists():
