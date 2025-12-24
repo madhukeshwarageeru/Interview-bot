@@ -1,8 +1,12 @@
 import google.generativeai as genai
 from pathlib import Path
 
-genai.configure(api_key="YOUR_GEMINI_API_KEY")
+import os
+
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 model = genai.GenerativeModel("gemini-pro")
+
+print("Gemini key loaded:", bool(os.getenv("GEMINI_API_KEY")))
 
 evaluation_prompt = Path("prompts/evaluation.txt").read_text()
 
