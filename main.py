@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.responses import FileResponse
 import shutil
 import uuid
@@ -9,6 +9,7 @@ from evaluator import evaluate
 from decision import decide
 from tts import text_to_speech
 
+from config import USE_WHISPER
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 
@@ -34,29 +35,31 @@ def question():
         "audio_url": f"/audio/{audio_path.split('/')[-1]}"
     }
 
+
 @app.post("/answer")
-def answer(audio: UploadFile = File(...)):
-    filename = f"/tmp/{uuid.uuid4()}.wav"
-    with open(filename, "wb") as buffer:
-        shutil.copyfileobj(audio.file, buffer)
+async def answer(
+    text: str = Form(None),
+    audio: UploadFile = None
+):
+    if USE_WHISPER:
+        if not audio:
+            return {"error": "Audio required"}
 
-    text = speech_to_text(filename)
-    evaluation = evaluate(current_question, text)
+        path = f"/tmp/{audio.filename}"
+        with open(path, "wb") as f:
+            f.write(await audio.read())
 
-    score_line = [l for l in evaluation.splitlines() if l.startswith("Score:")][0]
-    score = int(score_line.split(":")[1].strip())
+        from stt import transcribe_audio
+        text = transcribe_audio(path)
 
-    action = decide(score)
+    if not text:
+        return {"error": "No answer text"}
 
-    spoken_feedback = f"Your result is {action}. {evaluation}"
-    feedback_audio = text_to_speech(spoken_feedback)
-
-    return {
-        "transcribed_answer": text,
-        "evaluation": evaluation,
-        "decision": action,
-        "audio_url": f"/audio/{feedback_audio.split('/')[-1]}"
-    }
+    return evaluate(text)
+    
+@app.get("/config")
+def config():
+    return {"stt_mode": STT_MODE}
 
 @app.get("/audio/{filename}")
 def get_audio(filename: str):
