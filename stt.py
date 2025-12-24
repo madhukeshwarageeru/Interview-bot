@@ -17,7 +17,7 @@ if USE_WHISPER:
         return result["text"]
 
 if not USE_WHISPER:
-    raise RuntimeError("Whisper disabled")
+     print("Whisper disabled, using browser STT")
     def transcribe_audio(file_path: str) -> str:
         result = model.transcribe(file_path)
         return result["text"]
