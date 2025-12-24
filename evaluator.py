@@ -1,6 +1,7 @@
 import google.generativeai as genai
 from pathlib import Path
-
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import HTMLResponse
 import os
 
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
