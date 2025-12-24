@@ -16,6 +16,7 @@ from fastapi.responses import HTMLResponse
 app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
+print("🚀 App started successfully (Whisper lazy-loaded)")
 
 @app.get("/", response_class=HTMLResponse)
 def home():
