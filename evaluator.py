@@ -16,13 +16,21 @@ print("Files in BASE_DIR:", list(BASE_DIR.iterdir()))
 print("Prompts exists:", (BASE_DIR / "prompts").exists())
 evaluation_prompt_path = BASE_DIR / "prompts" / "evaluation.txt"
 
-if not evaluation_prompt_path.exists():
-    raise RuntimeError(
-        f"Missing file: {evaluation_prompt_path}. "
-        "Ensure prompts/evaluation.txt exists and is committed."
-    )
-evaluation_prompt = evaluation_prompt_path.read_text()
+PROMPTS_DIR = BASE_DIR / "prompts"
 
+DEFAULT_EVALUATION_PROMPT = """
+Evaluate the candidate answer.
+Point out missing concepts.
+Suggest improvements.
+"""
+
+evaluation_prompt_path = PROMPTS_DIR / "evaluation.txt"
+
+if evaluation_prompt_path.exists():
+    evaluation_prompt = evaluation_prompt_path.read_text()
+else:
+    print("⚠️ evaluation.txt not found, using default prompt")
+    evaluation_prompt = DEFAULT_EVALUATION_PROMPT
 
 def evaluate(question, answer):
     prompt = evaluation_prompt.format(
