@@ -1,5 +1,5 @@
 import os
 
-STT_MODE = os.getenv("STT_MODE")
+STT_MODE = os.getenv("STT_MODE", "browser").lower()
 
-USE_WHISPER = STT_MODE == 1   # whisper
+USE_WHISPER = STT_MODE == "whisper"
