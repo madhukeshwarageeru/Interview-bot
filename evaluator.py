@@ -9,7 +9,9 @@ model = genai.GenerativeModel("gemini-pro")
 
 print("Gemini key loaded:", bool(os.getenv("GEMINI_API_KEY")))
 
-evaluation_prompt = Path("prompts/evaluation.txt").read_text()
+evaluation_prompt = Path(__file__).parent / "prompts" / "evaluation.txt"
+evaluation_prompt = evaluation_prompt.read_text()
+
 
 def evaluate(question, answer):
     prompt = evaluation_prompt.format(
