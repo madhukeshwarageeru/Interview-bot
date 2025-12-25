@@ -120,7 +120,7 @@ async function submitAnswerText(text) {
     const res = await fetch("/answer", {
         method: "POST",
         body: new URLSearchParams({ text })
-        #recorder.stop();
+        
     });
     const data = await res.json();
     displayResult(data);
