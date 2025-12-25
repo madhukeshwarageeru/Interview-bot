@@ -42,7 +42,7 @@ def question():
 async def answer(
     text: str = Form(None),
     audio: UploadFile = None
-    global current_question
+    
 
     if not current_question:
         return JSONResponse(
