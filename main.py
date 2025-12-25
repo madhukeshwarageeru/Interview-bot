@@ -13,7 +13,7 @@ from config import USE_WHISPER
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 
-
+current_question = None
 app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -29,7 +29,9 @@ current_question = get_question()
 
 @app.get("/question")
 def question():
+    global current_question
     audio_path = text_to_speech(current_question)
+    current_question = question
     return {
         "question": current_question,
         "audio_url": f"/audio/{audio_path.split('/')[-1]}"
@@ -40,6 +42,13 @@ def question():
 async def answer(
     text: str = Form(None),
     audio: UploadFile = None
+    global current_question
+
+    if not current_question:
+        return JSONResponse(
+            status_code=400,
+            content={"error": "No active question"}
+        )
 ):
     if USE_WHISPER:
         if not audio:
@@ -55,7 +64,7 @@ async def answer(
     if not text:
         return {"error": "No answer text"}
 
-    return evaluate(text)
+    return evaluate(current_question,text)
     
 @app.get("/config")
 def config():
