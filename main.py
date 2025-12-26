@@ -42,14 +42,13 @@ def question():
 async def answer(
     text: str = Form(None),
     audio: UploadFile = None
-    
-
+):
+    global current_question
     if not current_question:
         return JSONResponse(
             status_code=400,
             content={"error": "No active question"}
         )
-):
     if USE_WHISPER:
         if not audio:
             return {"error": "Audio required"}
